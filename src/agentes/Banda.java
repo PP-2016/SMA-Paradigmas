@@ -1,3 +1,4 @@
+package agentes;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import comportamentos.ComportamentoBanda;
@@ -33,8 +34,8 @@ public class Banda extends Agent {
 //					/*Criar classes que conversem com Banda para que 
 //					 * "EnviarMensagem" passe a funcinonar
 //					 */
-//					//enviaMensagem("Boa noite, galera! Pink floyd na área");
-//					System.out.println("Boa noite, galera! PInk floyd na área!!");
+//					//enviaMensagem("Boa noite, galera! Pink floyd na ï¿½rea");
+//					System.out.println("Boa noite, galera! PInk floyd na ï¿½rea!!");
 //					
 //					
 //					

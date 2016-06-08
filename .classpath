@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/rafael/workspace/jade/4/jade/lib/commons-codec/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="/home/rafael/workspace/jade/jade/lib/jade.jar"/>
-	<classpathentry kind="lib" path="/home/rafael/workspace/jade/3/jade/lib/jadeExamples.jar"/>
+	<classpathentry kind="lib" path="/Users/MacSoares/Dropbox/UnB/PARADIGMAS/MultiAgentes/jade/lib/commons-codec/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/MacSoares/Dropbox/UnB/PARADIGMAS/MultiAgentes/jade/lib/jade.jar"/>
+	<classpathentry kind="lib" path="/Users/MacSoares/Dropbox/UnB/PARADIGMAS/MultiAgentes/jade/lib/jadeExamples.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
