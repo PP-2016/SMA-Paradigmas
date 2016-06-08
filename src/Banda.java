@@ -1,4 +1,5 @@
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import comportamentos.ComportamentoBanda;
 import jade.core.AID;
 import jade.lang.acl.MessageTemplate;
@@ -15,12 +16,38 @@ public class Banda extends Agent {
 	private String name = "Pink Floyd";
 	AID id = new AID(name, AID.ISLOCALNAME);
 	ACLMessage msg;
-
+	
 	//agente initializer
 	@Override
 	protected void setup(){
 		System.out.println("Banda "+getAID().getLocalName()+" no palco!");
-		addBehaviour(new ComportamentoBanda(this));
+		addBehaviour(new CyclicBehaviour(this) {
+			
+			@Override
+			public void action() {
+				ACLMessage msgJuiz = receive(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF));
+				if(msgJuiz != null)
+					addBehaviour(new ComportamentoBanda(myAgent,msgJuiz));
+				block();
+//				if(countB == 0){
+//					/*Criar classes que conversem com Banda para que 
+//					 * "EnviarMensagem" passe a funcinonar
+//					 */
+//					//enviaMensagem("Boa noite, galera! Pink floyd na área");
+//					System.out.println("Boa noite, galera! PInk floyd na área!!");
+//					
+//					
+//					
+//				 System.out.println(countB);
+//				}else if(msgAgente != null) {
+//					enviaMensagem("Boa noite!!");
+//					System.out.println(msgAgente.getContent());
+//				}else{
+//					this.block();
+//				}
+				
+			}
+		});
 	}
 	
 	protected void takeDown(){

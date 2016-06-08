@@ -1,13 +1,19 @@
 package comportamentos;
 
 import jade.core.Agent;
+import jade.core.behaviours.*;
+import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
+import jade.domain.introspection.AddedBehaviour;
+
+import java.util.Random;
+
 import jade.core.AID;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.ACLMessage;
 
 
-public class ComportamentoBanda extends SimpleBehaviour{
+public class ComportamentoBanda extends SequentialBehaviour{
 
 	/**
 	 * 
@@ -15,28 +21,28 @@ public class ComportamentoBanda extends SimpleBehaviour{
 	private static final long serialVersionUID = 1L;
 	
 	private static final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-	ACLMessage msgAgente;
+	ACLMessage resposta, msgJuiz;
+	
+	
 	Integer countB = new Integer(0);
+	
+	Random rand = new Random();
+	
 
-	public ComportamentoBanda(Agent agente) {
+	public ComportamentoBanda(Agent agente, ACLMessage msgJuiz) {
 		super(agente);
+		this.msgJuiz = msgJuiz;
 	}
 	
 	@Override
-	public void action() {
-		msgAgente = myAgent.receive(mt);
-		if(countB == 0){
-			/*Criar classes que conversem com Banda para que 
-			 * "EnviarMensagem" passe a funcinonar
-			 */
-			//enviaMensagem("Boa noite, galera! Pink floyd na área");
-			System.out.println("Boa noite, galera! PInk floyd na área!!");
-		 System.out.println(countB);
-		}else if(msgAgente != null) {
-			enviaMensagem("Boa noite!!");
-			System.out.println(msgAgente.getContent());
-		}else{
-			this.block();
+	public void onStart() {
+		if(msgJuiz != null){
+			int erro = rand.nextInt(10);
+			
+			if(erro == 1){
+				resposta = 	msgJuiz.createReply();
+				enviaMensagem("~Erro da banda~");
+			}
 		}
 	}
 	
@@ -46,18 +52,4 @@ public class ComportamentoBanda extends SimpleBehaviour{
 		mensage_received.setContent(mensagem);
 		myAgent.send(mensage_received);
 	}
-
-	@Override
-	public boolean done() {
-		if(countB == 1)
-			myAgent.doDelete();
-		else
-			countB++;
-		
-		
-		return false;
-	}
-	
-	
-
 }
