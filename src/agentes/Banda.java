@@ -22,38 +22,24 @@ public class Banda extends Agent {
 	@Override
 	protected void setup(){
 		System.out.println("Banda "+getAID().getLocalName()+" no palco!");
+
 		addBehaviour(new CyclicBehaviour(this) {
-			
 			@Override
 			public void action() {
-				ACLMessage msgJuiz = receive(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF));
-				if(msgJuiz != null)
-					addBehaviour(new ComportamentoBanda(myAgent,msgJuiz));
-				block();
-//				if(countB == 0){
-//					/*Criar classes que conversem com Banda para que 
-//					 * "EnviarMensagem" passe a funcinonar
-//					 */
-//					//enviaMensagem("Boa noite, galera! Pink floyd na �rea");
-//					System.out.println("Boa noite, galera! PInk floyd na �rea!!");
-//					
-//					
-//					
-//				 System.out.println(countB);
-//				}else if(msgAgente != null) {
-//					enviaMensagem("Boa noite!!");
-//					System.out.println(msgAgente.getContent());
-//				}else{
-//					this.block();
-//				}
-				
+				ACLMessage msgJurado = receive(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF));
+				if(msgJurado != null){
+					addBehaviour(new ComportamentoBanda(myAgent,msgJurado));
+				}				
 			}
 		});
+		sendMessage();
 	}
 	
+	private void sendMessage(){
+		
+	}
 	protected void takeDown(){
 		System.out.println("Banda "+getName()+" saiu do palco!");
 	}
 	
-
 }

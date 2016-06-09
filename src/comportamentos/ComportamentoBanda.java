@@ -36,6 +36,7 @@ public class ComportamentoBanda extends SequentialBehaviour{
 	
 	@Override
 	public void onStart() {
+		enviaPrimeiraMensagem();
 		if(msgJuiz != null){
 			int erro = rand.nextInt(10);
 			
@@ -52,4 +53,17 @@ public class ComportamentoBanda extends SequentialBehaviour{
 		mensage_received.setContent(mensagem);
 		myAgent.send(mensage_received);
 	}
+	
+	private void enviaPrimeiraMensagem(){
+		
+		AID recebedor = new AID("jurado", AID.ISLOCALNAME);
+		ACLMessage mensagem = new ACLMessage(ACLMessage.REQUEST);
+		
+		mensagem.addReceiver(recebedor);
+		mensagem.setContent("Hora do Show Porra!");
+		System.out.println(mensagem);
+		myAgent.send(mensagem);
+		System.out.println(mensagem);
+	}
+	
 }

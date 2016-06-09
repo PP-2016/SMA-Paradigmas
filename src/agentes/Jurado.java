@@ -11,7 +11,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.MessageTemplate;
 
 
-public class Juiz extends Agent{
+public class Jurado extends Agent{
 	
 	@Override
 	protected void setup(){
@@ -30,10 +30,17 @@ public class Juiz extends Agent{
 		}	
 	}
 	
-	private class RequestPerformer extends Behaviour {
+	private class ComportamentoJuiz extends Behaviour {
+		
+		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
+		ACLMessage msg = myAgent.receive(mt);	
+		
+		public ComportamentoJuiz(Agent banda){
+			super(banda);
+		}
+		
 		public void action() {
-			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
-			ACLMessage msg = myAgent.receive(mt);
+	
 			if (msg != null) {
 				// ACCEPT_PROPOSAL Message received. Process it
 				String performance = msg.getContent();
