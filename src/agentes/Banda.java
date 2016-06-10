@@ -29,6 +29,7 @@ public class Banda extends Agent {
 	@Override
 	protected void setup(){
 		System.out.println("Banda "+getAID().getLocalName()+" no palco!");
+		
 		addBehaviour(new TickerBehaviour(this, 2000) {
 
 			@Override
@@ -55,9 +56,11 @@ public class Banda extends Agent {
 				
 			}
 		});
-		
 	}
 	
+	private void sendMessage(){
+		
+	}
 	protected void takeDown(){
 		System.out.println("Banda "+getName()+" saiu do palco!");
 	}
@@ -84,5 +87,6 @@ public class Banda extends Agent {
 		
 		
 	}
+
 
 }
