@@ -23,7 +23,7 @@ public class Banda extends Agent {
 	private String name = "Pink Floyd";
 	AID id = new AID(name, AID.ISLOCALNAME);
 	ACLMessage msg;
-	private AID[] juizes;
+	private AID[] jurado;
 	
 	//agente initializer
 	@Override
@@ -42,8 +42,8 @@ public class Banda extends Agent {
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template);
 						for (int i = 0; i < result.length; i++) {
-							juizes[i] = result[i].getName();
-							System.out.println(juizes[i].getName());
+							jurado[i] = result[i].getName();
+							System.out.println(jurado[i].getName());
 						}
 					} catch (FIPAException e) {
 						e.printStackTrace();
@@ -66,8 +66,13 @@ public class Banda extends Agent {
 
 		@Override
 		public void action() {
-			// TODO Auto-generated method stub
-			
+			ACLMessage message_to_Jugdes = new ACLMessage(ACLMessage.CFP);
+		
+			for (int i = 0; i < jurado.length; ++i) {
+				cfp.addReceiver(sellerAgents[i]);
+			} 
+		
+		
 		}
 
 		@Override
