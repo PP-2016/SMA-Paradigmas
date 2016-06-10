@@ -23,7 +23,7 @@ public class Banda extends Agent {
 	private String name = "Pink Floyd";
 	AID id = new AID(name, AID.ISLOCALNAME);
 	ACLMessage msg;
-	private AID[] juizes;
+	private AID[] jurado;
 	
 	//agente initializer
 	@Override
@@ -48,8 +48,8 @@ public class Banda extends Agent {
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template);
 						for (int i = 0; i < result.length; i++) {
-							juizes[i] = result[i].getName();
-							System.out.println(juizes[i].getName());
+							jurado[i] = result[i].getName();
+							System.out.println(jurado[i].getName());
 						}
 					} catch (FIPAException e) {
 						e.printStackTrace();
@@ -71,16 +71,28 @@ public class Banda extends Agent {
 	}
 	
 	private class Performance extends Behaviour{
-
+		private MessageTemplate message_template;
+		
 		@Override
 		public void action() {
-			// TODO Auto-generated method stub
+			ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
+		
+			for (int i = 0; i < jurado.length; i++) {
+				message_to_jugdes.addReceiver(jurado[i]);
+			} 
+			
+			// MENSAGEM DE TESTE
+			message_to_jugdes.setContent("10");
+			message_to_jugdes.setConversationId("Band_Performance_value");
+			myAgent.send(message_to_jugdes);
+			
+			message_template = MessageTemplate.and(MessageTemplate.MatchConversationId("Band_performance_value"),
+					MessageTemplate.MatchInReplyTo(message_to_jugdes.getReplyWith()));
 			
 		}
 
 		@Override
 		public boolean done() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
