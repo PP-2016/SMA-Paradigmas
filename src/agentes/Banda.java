@@ -1,5 +1,6 @@
 package agentes;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
@@ -22,6 +23,7 @@ public class Banda extends Agent {
 	private String name = "Pink Floyd";
 	AID id = new AID(name, AID.ISLOCALNAME);
 	ACLMessage msg;
+	private AID[] juizes;
 	
 	//agente initializer
 	@Override
@@ -39,9 +41,15 @@ public class Banda extends Agent {
 					template.addServices(sd);
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template);
+						for (int i = 0; i < result.length; i++) {
+							juizes[i] = result[i].getName();
+							System.out.println(juizes[i].getName());
+						}
 					} catch (FIPAException e) {
 						e.printStackTrace();
 					}
+					
+					addBehaviour(new Performance());
 					
 					
 				
@@ -54,5 +62,22 @@ public class Banda extends Agent {
 		System.out.println("Banda "+getName()+" saiu do palco!");
 	}
 	
+	private class Performance extends Behaviour{
+
+		@Override
+		public void action() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean done() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		
+		
+	}
 
 }
