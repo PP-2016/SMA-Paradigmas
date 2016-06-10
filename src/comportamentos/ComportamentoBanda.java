@@ -13,7 +13,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.ACLMessage;
 
 
-public class ComportamentoBanda extends SequentialBehaviour{
+public class ComportamentoBanda extends SimpleBehaviour{
 
 	/**
 	 * 
@@ -23,47 +23,74 @@ public class ComportamentoBanda extends SequentialBehaviour{
 	private static final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 	ACLMessage resposta, msgJuiz;
 	
-	
 	Integer countB = new Integer(0);
 	
 	Random rand = new Random();
 	
 
-	public ComportamentoBanda(Agent agente, ACLMessage msgJuiz) {
-		super(agente);
-		this.msgJuiz = msgJuiz;
+	public ComportamentoBanda(Agent banda) {
+		super(banda);
 	}
 	
 	@Override
-	public void onStart() {
-		enviaPrimeiraMensagem();
-		if(msgJuiz != null){
-			int erro = rand.nextInt(10);
-			
-			if(erro == 1){
-				resposta = 	msgJuiz.createReply();
-				enviaMensagem("~Erro da banda~");
-			}
-		}
+	public void action(){
+		resposta = myAgent.receive(mt);
+	    if (resposta != null) {
+	      System.out.println(resposta.getContent());
+	      enviaMsg();
+	    } else {
+	      this.block();
+	    }
 	}
 	
-	private void enviaMensagem(String mensagem){
-		ACLMessage mensage_received = new ACLMessage(ACLMessage.REQUEST);
-		//mensage_received.addReceiver(msgAgente.getSender());
-		mensage_received.setContent(mensagem);
-		myAgent.send(mensage_received);
+	private void enviaMsg(){
+	    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+	    msg.addReceiver(resposta.getSender());
+	    msg.setContent(myAgent.getLocalName() + " diz: Nós vamos cantar Highway to Hell!!");
+	    myAgent.send(msg);
 	}
 	
-	private void enviaPrimeiraMensagem(){
-		
-		AID recebedor = new AID("jurado", AID.ISLOCALNAME);
-		ACLMessage mensagem = new ACLMessage(ACLMessage.REQUEST);
-		
-		mensagem.addReceiver(recebedor);
-		mensagem.setContent("Hora do Show Porra!");
-		System.out.println(mensagem);
-		myAgent.send(mensagem);
-		System.out.println(mensagem);
+	@Override
+	public boolean done() {
+	  if (countB == 3)
+	    myAgent.doDelete();
+	  else
+	    countB++;
+	
+	  return false;
 	}
+	
+	
+//	@Override
+//	public void onStart() {
+//		enviaPrimeiraMensagem();
+//		if(msgJuiz != null){
+//			int erro = rand.nextInt(10);
+//			
+//			if(erro == 1){
+//				resposta = 	msgJuiz.createReply();
+//				enviaMensagem("~Erro da banda~");
+//			}
+//		}
+//	}
+//	
+//	private void enviaMensagem(String mensagem){
+//		ACLMessage mensage_received = new ACLMessage(ACLMessage.REQUEST);
+//		//mensage_received.addReceiver(msgAgente.getSender());
+//		mensage_received.setContent(mensagem);
+//		myAgent.send(mensage_received);
+//	}
+//	
+//	private void enviaPrimeiraMensagem(){
+//		
+//		AID recebedor = new AID("jurado", AID.ISLOCALNAME);
+//		ACLMessage mensagem = new ACLMessage(ACLMessage.REQUEST);
+//		
+//		mensagem.addReceiver(recebedor);
+//		mensagem.setContent("Hora do Show Porra!");
+//		System.out.println(mensagem);
+//		myAgent.send(mensagem);
+//		System.out.println(mensagem);
+//	}
 	
 }

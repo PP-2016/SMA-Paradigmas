@@ -1,5 +1,5 @@
 package agentes;
-import comportamentos.ComportamentoJuiz;
+import comportamentos.ComportamentoJurado;
 
 import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import jade.core.AID;
@@ -17,22 +17,12 @@ import jade.lang.acl.MessageTemplate;
 
 public class Jurado extends Agent{
 	
-	@Override
-	protected void setup(){
-		
-		DFAgentDescription dfd = new DFAgentDescription();
-		dfd.setName(getAID());
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType("Judge");
-		sd.setName("JADE-Judge");
-		dfd.addServices(sd);
-		addBehaviour(new ComportamentoJuiz(this));
-		try {
-			DFService.register(this, dfd);
-		}
-		catch (FIPAException fe) {
-			fe.printStackTrace();
-		}	
-	}
+	private static final long serialVersionUID = 1L;
+
+	  protected void setup(){
+	    //linha de apresentação
+	    System.out.println(this.getLocalName() + " diz: Sejam bem vindos e é Hora do Show!!");
+	    addBehaviour(new ComportamentoJurado(this));
+	  }
 
 }
