@@ -34,7 +34,12 @@ public class Banda extends Agent {
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //definição do comportamento que a agente Maria irá executar
 
-		addBehaviour(new TickerBehaviour(this, 2000) {
+		addBehaviour(new TickerBehaviour(this, 20000) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -5652388196400737248L;
 
 			@Override
 			protected void onTick() {
@@ -42,15 +47,18 @@ public class Banda extends Agent {
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
 					
-					sd.setType("Cantar-Musica");
+					sd.setType("Ato de Jugar");
 					template.addServices(sd);
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template);
-						for (int i = 0; i < result.length; i++) {
+						jurado = new AID[result.length];
+						System.out.println("****************ol�, 1");
+						for (int i = 0; i < result.length; ++i) {
 							jurado[i] = result[i].getName();
 							System.out.println(jurado[i].getName());
 						}
 					} catch (FIPAException e) {
+						System.out.println("*****************Erro");
 						e.printStackTrace();
 					}
 					
@@ -77,7 +85,7 @@ public class Banda extends Agent {
 		@Override
 		public void action() {
 			ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
-		
+			System.out.println("Tamanho: ************"+jurado.length);
 			for (int i = 0; i < jurado.length; i++) {
 				message_to_jugdes.addReceiver(jurado[i]);
 			} 
@@ -94,7 +102,7 @@ public class Banda extends Agent {
 
 		@Override
 		public boolean done() {
-			return false;
+			return true;
 		}
 
 		

@@ -17,8 +17,9 @@ import jade.lang.acl.MessageTemplate;
 
 public class Jurado extends Agent{
 	
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 2L;
+	private AID[] jurado;
+	
 	  protected void setup(){
 	    //linha de apresentação
 	    System.out.println(this.getLocalName() + " diz: Sejam bem vindos e é Hora do Show!!");
@@ -49,7 +50,7 @@ public class Jurado extends Agent{
 		MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 		ACLMessage message_inform = myAgent.receive(message_t);		
 
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 2L;
 		
 		
 		@Override
