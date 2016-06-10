@@ -70,6 +70,8 @@ public class Banda extends Agent {
 	}
 	
 	private class Performance extends Behaviour{
+		
+		private static final long serialVersionUID = 1L;
 		private MessageTemplate message_template;
 		
 		@Override
