@@ -66,21 +66,28 @@ public class Banda extends Agent {
 	}
 	
 	private class Performance extends Behaviour{
-
+		private MessageTemplate message_template;
+		
 		@Override
 		public void action() {
-			ACLMessage message_to_Jugdes = new ACLMessage(ACLMessage.CFP);
+			ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
 		
-			for (int i = 0; i < jurado.length; ++i) {
-				cfp.addReceiver(sellerAgents[i]);
+			for (int i = 0; i < jurado.length; i++) {
+				message_to_jugdes.addReceiver(jurado[i]);
 			} 
-		
-		
+			
+			// MENSAGEM DE TESTE
+			message_to_jugdes.setContent("10");
+			message_to_jugdes.setConversationId("Band_Performance_value");
+			myAgent.send(message_to_jugdes);
+			
+			message_template = MessageTemplate.and(MessageTemplate.MatchConversationId("Band_performance_value"),
+					MessageTemplate.MatchInReplyTo(message_to_jugdes.getReplyWith()));
+			
 		}
 
 		@Override
 		public boolean done() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
