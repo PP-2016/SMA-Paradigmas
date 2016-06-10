@@ -33,7 +33,6 @@ public class Banda extends Agent {
 		System.out.println("Banda "+getAID().getLocalName() + " entrou no palco.");
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //definição do comportamento que a agente Maria irá executar
-	    addBehaviour(new ComportamentoBanda(this));
 
 		addBehaviour(new TickerBehaviour(this, 2000) {
 
@@ -55,7 +54,7 @@ public class Banda extends Agent {
 						e.printStackTrace();
 					}
 					
-					addBehaviour(new Performance());
+				   addBehaviour(new Performance());
 					
 					
 				
