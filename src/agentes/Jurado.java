@@ -58,7 +58,7 @@ public class Jurado extends Agent{
 			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			ACLMessage message_inform = myAgent.receive(message_t);	
 		
-			if(message_t != null){
+			if(message_inform != null){
 				
 				String string_value = message_inform.getContent();
 				System.out.println("**********");
