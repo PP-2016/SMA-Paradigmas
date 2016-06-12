@@ -57,17 +57,29 @@ public class Jurado extends Agent{
 		public void action() {
 			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			ACLMessage message_inform = myAgent.receive(message_t);	
-		
+			 
+			int erros_banda =0;
+			
 			if(message_inform != null){
 				
 				String string_value = message_inform.getContent();
 				Integer value = new Integer(string_value);
+				
 				ACLMessage response = message_inform.createReply();
 
 				if(value != null){
-					response.setPerformative(ACLMessage.INFORM);
-					System.out.println("Banda: "+ message_inform.getSender().getLocalName()+"Valor: "+ value);
-					response.setContent("*****Adorei, bixo. Mas hoje é NÃO****\n\n");
+				
+					if(value == 10){
+						response.setPerformative(ACLMessage.INFORM);
+						response.setContent("ERRO");
+						erros_banda++;
+						System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
+					}else{
+						response.setPerformative(ACLMessage.INFORM);
+						response.setContent("OK");
+					}
+							
+//					System.out.println("Banda: "+ message_inform.getSender().getLocalName()+"Valor: "+ value);
 				}
 				
 				myAgent.send(response);

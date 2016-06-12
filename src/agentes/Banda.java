@@ -37,7 +37,7 @@ public class Banda extends Agent {
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //definição do comportamento que a agente Maria irá executar
 
-		addBehaviour(new TickerBehaviour(this, 2000) {
+		addBehaviour(new TickerBehaviour(this, 1000) {
 
 			/**
 			 * 
@@ -80,19 +80,20 @@ public class Banda extends Agent {
 	}
 	
 	int momento = 0;//variavel que controla o switch
-	
+	int range = 100; //variavel controladora da chance de erro
 	private class Performance extends Behaviour{
 		
 		private static final long serialVersionUID = 1L;
 		private MessageTemplate message_template;
 //		private int momento = 0;
-		private int range = 1000;
+//		private int range = 1000;
 		
 		@Override
 		public void action() {
 			
 			switch(momento){
 				case 0:
+//					System.out.println("***********Case 0 - Enviando msg para Jurados*********");
 					ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
 					for (int i = 0; i < jurado.length; i++) {
 						message_to_jugdes.addReceiver(jurado[i]);
@@ -101,7 +102,7 @@ public class Banda extends Agent {
 					// MENSAGEM DE TESTE
 					Integer value = ErroRandomicoBanda(range);
 				
-					System.out.println("***"+range+"***");
+					System.out.println("***"+value+"***");
 					message_to_jugdes.setContent(value.toString());
 					message_to_jugdes.setConversationId("Band_Performance_value");
 					myAgent.send(message_to_jugdes);
@@ -114,13 +115,14 @@ public class Banda extends Agent {
 				
 				case 1:
 					ACLMessage reply = myAgent.receive(message_template);
-					System.out.println("***********oioio*********");
+//					System.out.println("***********Case 1 - Recebendo e interpretando msgs (banda)*********");
 					if(reply != null){
 						
 						if(reply.getPerformative() == ACLMessage.INFORM){
 							//recebe a "cara" do jurado. Se a cara for negativa, aumenta a chance de erro.
 							
 							System.out.println(reply.getContent());//teste
+							range--;
 							
 							momento = 0; //voltar para o passo onde envia a msg de tocar;
 						}
