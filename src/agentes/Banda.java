@@ -7,6 +7,9 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+
+import java.util.Random;
+
 import comportamentos.ComportamentoBanda;
 import jade.core.AID;
 import jade.lang.acl.MessageTemplate;
@@ -52,7 +55,6 @@ public class Banda extends Agent {
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template);
 						jurado = new AID[result.length];
-						System.out.println("****************olá, 1");
 						for (int i = 0; i < result.length; ++i) {
 							jurado[i] = result[i].getName();
 							System.out.println(jurado[i].getName());
@@ -81,31 +83,70 @@ public class Banda extends Agent {
 		
 		private static final long serialVersionUID = 1L;
 		private MessageTemplate message_template;
+		private int momento = 0;
+		private int range = 1000;
 		
 		@Override
 		public void action() {
-			ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
-			System.out.println("Tamanho: ************"+jurado.length);
-			for (int i = 0; i < jurado.length; i++) {
-				message_to_jugdes.addReceiver(jurado[i]);
-			} 
 			
-			// MENSAGEM DE TESTE
-			message_to_jugdes.setContent("10");
-			message_to_jugdes.setConversationId("Band_Performance_value");
-			myAgent.send(message_to_jugdes);
-			
-			message_template = MessageTemplate.and(MessageTemplate.MatchConversationId("Band_performance_value"),
-					MessageTemplate.MatchInReplyTo(message_to_jugdes.getReplyWith()));
-			
+			switch(momento){
+				case 0:
+					ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
+					for (int i = 0; i < jurado.length; i++) {
+						message_to_jugdes.addReceiver(jurado[i]);
+					} 
+					
+					// MENSAGEM DE TESTE
+					Integer value = ErroRandomicoBanda(range);
+				
+					System.out.println(range);
+					message_to_jugdes.setContent(value.toString());
+					message_to_jugdes.setConversationId("Band_Performance_value");
+					myAgent.send(message_to_jugdes);
+					
+					message_template = MessageTemplate.and(MessageTemplate.MatchConversationId("Band_performance_value"),
+							MessageTemplate.MatchInReplyTo(message_to_jugdes.getReplyWith()));
+					
+					momento = 1; //ir para "receber" msg
+					break;
+				
+				case 1:
+					ACLMessage reply = myAgent.receive(message_template);
+					System.out.println("***********oioio*********");
+					if(reply != null){
+						
+						if(reply.getPerformative() == ACLMessage.INFORM){
+							//recebe a "cara" do jurado. Se a cara for negativa, aumenta a chance de erro.
+							
+							System.out.println(reply.getContent());//teste
+							
+							momento = 0; //voltar para o passo onde envia a msg de tocar;
+						}
+						
+					}else{
+						block();
+					}
+					break;
+					
+					
+				
 		}
+		
+	 }
 
 		@Override
 		public boolean done() {
 			return true;
 		}
 
-		
+		public int ErroRandomicoBanda(int range){
+			
+			Random whell= new Random();
+			int value = whell.nextInt(range);
+				
+			return value;
+			
+		}
 		
 	}
 
