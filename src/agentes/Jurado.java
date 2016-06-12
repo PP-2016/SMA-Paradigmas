@@ -66,9 +66,8 @@ public class Jurado extends Agent{
 
 				if(value != null){
 					response.setPerformative(ACLMessage.INFORM);
-					response.setContent("Adorei, bixo. Mas hoje é NÃO********************");
-//					System.out.println(response);
 					System.out.println("Banda: "+ message_inform.getSender().getLocalName()+"Valor: "+ value);
+					response.setContent("*****Adorei, bixo. Mas hoje é NÃO****\n\n");
 				}
 				
 				myAgent.send(response);

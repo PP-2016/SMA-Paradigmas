@@ -79,11 +79,13 @@ public class Banda extends Agent {
 		System.out.println("Banda "+this.getLocalName()+" saiu do palco!");
 	}
 	
+	int momento = 0;//variavel que controla o switch
+	
 	private class Performance extends Behaviour{
 		
 		private static final long serialVersionUID = 1L;
 		private MessageTemplate message_template;
-		private int momento = 0;
+//		private int momento = 0;
 		private int range = 1000;
 		
 		@Override
@@ -99,7 +101,7 @@ public class Banda extends Agent {
 					// MENSAGEM DE TESTE
 					Integer value = ErroRandomicoBanda(range);
 				
-					System.out.println(range);
+					System.out.println("***"+range+"***");
 					message_to_jugdes.setContent(value.toString());
 					message_to_jugdes.setConversationId("Band_Performance_value");
 					myAgent.send(message_to_jugdes);
