@@ -74,16 +74,20 @@ public class Jurado extends Agent{
 				if(value != null){
 				
 					if(value == 1 ){
+						erros_banda++;
+						
 						response.setPerformative(ACLMessage.INFORM);
 						response.setContent("ERRO");
 						
-						erros_banda++;
+						
+						System.out.println("****************erros da banda:"+erros_banda+"\n\n");
 						
 						System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
 					}else{
 						performance++;
 						
-						
+						System.out.println("****************Performance:"+performance+"\n\n");
+
 						response.setPerformative(ACLMessage.INFORM);
 						response.setContent("OK");
 					}
@@ -93,6 +97,7 @@ public class Jurado extends Agent{
 				
 				myAgent.send(response);
 			}else{
+
 				block();
 			}
 			

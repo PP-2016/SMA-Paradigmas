@@ -28,7 +28,7 @@ public class Banda extends Agent {
 	ACLMessage msg;
 	private AID[] jurado;
 	int contador = 0;
-	public static final int CONDICAO = 4;
+	public static final int CONDICAO = 20;
 	
 	//agente initializer
 	@Override
@@ -39,7 +39,7 @@ public class Banda extends Agent {
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //defini√ß√£o do comportamento que a agente Maria ir√° executar
 
-		addBehaviour(new TickerBehaviour(this, 1000) {
+		addBehaviour(new TickerBehaviour(this, 3000) {
 
 			/**
 			 * 
@@ -49,9 +49,9 @@ public class Banda extends Agent {
 			@Override
 			protected void onTick() {
 					
-				if(contador != CONDICAO){
+				if(contador < CONDICAO){
 					
-					System.out.println("Cantando..");
+					System.out.println("****************Cantando..");
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
 					
@@ -62,7 +62,7 @@ public class Banda extends Agent {
 						jurado = new AID[result.length];
 						for (int i = 0; i < result.length; ++i) {
 							jurado[i] = result[i].getName();
-							System.out.println(jurado[i].getName());
+//							System.out.println(jurado[i].getName());
 						}
 					} catch (FIPAException e) {
 						System.out.println("*****************Erro");
@@ -71,9 +71,10 @@ public class Banda extends Agent {
 					
 					//verificar o contador, se for para continuar acontece o Performance.
 					
-					
-						System.out.println(contador+"**************************");
-						addBehaviour(new Performance());
+						System.out.println("****************Contador de interaÁıes: "+contador);
+						
+						int momento = 0;//variavel que controla o switch
+						addBehaviour(new Performance(momento));
 						
 					}
 					else{
@@ -86,10 +87,7 @@ public class Banda extends Agent {
 		});
 	}
 	
-	public boolean done(){
-		
-		return false;
-	}
+	
 	
 	protected void takeDown(){
 		System.out.println("Banda "+this.getLocalName()+" saiu do palco!");
@@ -102,13 +100,19 @@ public class Banda extends Agent {
 	
 	
 	//inner class
-	int momento = 0;//variavel que controla o switch
-	int range = 100; //variavel controladora da chance de erro
+	
+	int range = 10; //variavel controladora da chance de erro
 	private class Performance extends Behaviour{
 		
 		private static final long serialVersionUID = 1L;
 		private MessageTemplate message_template;
 		
+		private int momento;
+		
+		public Performance(int momento) {
+			this.momento = momento;
+		}
+
 		@Override
 		public void action() {
 			
@@ -122,7 +126,7 @@ public class Banda extends Agent {
 					// MENSAGEM DE TESTE
 					Integer value = ErroRandomicoBanda(range);
 				
-					System.out.println("***"+value+"***\n\n\n");
+					System.out.println("****************Valor random: "+value);
 					message_to_jugdes.setContent(value.toString());
 					message_to_jugdes.setConversationId("Band_Performance_value");
 					myAgent.send(message_to_jugdes);
@@ -145,13 +149,13 @@ public class Banda extends Agent {
 							
 							if(reply.getContent().equalsIgnoreCase("erro")){
 		
-								System.out.println(reply.getContent());//teste
+								System.out.println("****************Conte˙do da msg do Juiz: "+reply.getContent());//teste
 								range--;
 							
 							}else{
 								
 							}
-							momento = 0; //voltar para o passo onde envia a msg de tocar;
+							//momento = 0; //voltar para o passo onde envia a msg de tocar;
 						}
 						
 					}else{
