@@ -27,6 +27,8 @@ public class Banda extends Agent {
 	AID id = new AID(name, AID.ISLOCALNAME);
 	ACLMessage msg;
 	private AID[] jurado;
+	int contador = 0;
+	public static final int CONDICAO = 4;
 	
 	//agente initializer
 	@Override
@@ -46,6 +48,9 @@ public class Banda extends Agent {
 
 			@Override
 			protected void onTick() {
+					
+				if(contador != CONDICAO){
+					
 					System.out.println("Cantando..");
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
@@ -64,7 +69,16 @@ public class Banda extends Agent {
 						e.printStackTrace();
 					}
 					
-				   addBehaviour(new Performance());
+					//verificar o contador, se for para continuar acontece o Performance.
+					
+					
+						System.out.println(contador+"**************************");
+						addBehaviour(new Performance());
+						
+					}
+					else{
+						block();
+					}
 					
 					
 				
@@ -72,28 +86,34 @@ public class Banda extends Agent {
 		});
 	}
 	
-	private void sendMessage(){
+	public boolean done(){
 		
+		return false;
 	}
+	
 	protected void takeDown(){
 		System.out.println("Banda "+this.getLocalName()+" saiu do palco!");
 	}
 	
+	
+	
+
+	
+	
+	
+	//inner class
 	int momento = 0;//variavel que controla o switch
 	int range = 100; //variavel controladora da chance de erro
 	private class Performance extends Behaviour{
 		
 		private static final long serialVersionUID = 1L;
 		private MessageTemplate message_template;
-//		private int momento = 0;
-//		private int range = 1000;
 		
 		@Override
 		public void action() {
 			
 			switch(momento){
 				case 0:
-//					System.out.println("***********Case 0 - Enviando msg para Jurados*********");
 					ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
 					for (int i = 0; i < jurado.length; i++) {
 						message_to_jugdes.addReceiver(jurado[i]);
@@ -102,7 +122,7 @@ public class Banda extends Agent {
 					// MENSAGEM DE TESTE
 					Integer value = ErroRandomicoBanda(range);
 				
-					System.out.println("***"+value+"***");
+					System.out.println("***"+value+"***\n\n\n");
 					message_to_jugdes.setContent(value.toString());
 					message_to_jugdes.setConversationId("Band_Performance_value");
 					myAgent.send(message_to_jugdes);
@@ -111,19 +131,26 @@ public class Banda extends Agent {
 							MessageTemplate.MatchInReplyTo(message_to_jugdes.getReplyWith()));
 					
 					momento = 1; //ir para "receber" msg
+					contador++;
 					break;
 				
 				case 1:
 					ACLMessage reply = myAgent.receive(message_template);
-//					System.out.println("***********Case 1 - Recebendo e interpretando msgs (banda)*********");
+
 					if(reply != null){
 						
 						if(reply.getPerformative() == ACLMessage.INFORM){
 							//recebe a "cara" do jurado. Se a cara for negativa, aumenta a chance de erro.
 							
-							System.out.println(reply.getContent());//teste
-							range--;
 							
+							if(reply.getContent().equalsIgnoreCase("erro")){
+		
+								System.out.println(reply.getContent());//teste
+								range--;
+							
+							}else{
+								
+							}
 							momento = 0; //voltar para o passo onde envia a msg de tocar;
 						}
 						

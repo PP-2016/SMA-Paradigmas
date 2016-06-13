@@ -20,6 +20,10 @@ public class Jurado extends Agent{
 	private static final long serialVersionUID = 2L;
 	private AID[] jurado;
 	
+	
+	int erros_banda =0;// numero de erros que a banda cometeu.
+	int performance =0;// numero de mensagens recebidas sem Erro. 
+	
 	  protected void setup(){
 	    //linha de apresentação
 	    System.out.println(this.getLocalName() + " diz: Sejam bem vindos e eh Hora do Show!!");
@@ -58,7 +62,7 @@ public class Jurado extends Agent{
 			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			ACLMessage message_inform = myAgent.receive(message_t);	
 			 
-			int erros_banda =0;
+			
 			
 			if(message_inform != null){
 				
@@ -69,12 +73,17 @@ public class Jurado extends Agent{
 
 				if(value != null){
 				
-					if(value == 10){
+					if(value == 1 ){
 						response.setPerformative(ACLMessage.INFORM);
 						response.setContent("ERRO");
+						
 						erros_banda++;
+						
 						System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
 					}else{
+						performance++;
+						
+						
 						response.setPerformative(ACLMessage.INFORM);
 						response.setContent("OK");
 					}
