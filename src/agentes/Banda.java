@@ -39,7 +39,7 @@ public class Banda extends Agent {
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //definição do comportamento que a agente Maria irá executar
 
-		addBehaviour(new TickerBehaviour(this, 3000) {
+		addBehaviour(new TickerBehaviour(this, 1000) {
 
 			/**
 			 * 
@@ -71,14 +71,15 @@ public class Banda extends Agent {
 					
 					//verificar o contador, se for para continuar acontece o Performance.
 					
-						System.out.println("****************Contador de intera��es: "+contador);
+						System.out.println("****************Contador de interações: "+contador);
 						
 						int momento = 0;//variavel que controla o switch
 						addBehaviour(new Performance(momento));
 						
-					}
-					else{
-						block();
+				}else{
+						System.out.println("****************: " + getAID().getLocalName() + " diz: Essa foi nossa música!!!");
+						int momento =1;
+						addBehaviour(new Performance(momento));
 					}
 					
 					
@@ -87,17 +88,9 @@ public class Banda extends Agent {
 		});
 	}
 	
-	
-	
 	protected void takeDown(){
 		System.out.println("Banda "+this.getLocalName()+" saiu do palco!");
 	}
-	
-	
-	
-
-	
-	
 	
 	//inner class
 	
@@ -141,31 +134,45 @@ public class Banda extends Agent {
 					break;
 				
 				case 1:
-					ACLMessage reply = myAgent.receive(message_template);
-
-					if(reply != null){
+					
+					if(contador == CONDICAO){
+					
+						ACLMessage final_message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
+						for (int i = 0; i < jurado.length; i++) {
+							final_message_to_jugdes.addReceiver(jurado[i]);
+						} 
 						
-						if(reply.getPerformative() == ACLMessage.INFORM){
-							//recebe a "cara" do jurado. Se a cara for negativa, aumenta a chance de erro.
-							
-							
-							if(reply.getContent().equalsIgnoreCase("erro")){
-		
-								System.out.println("****************Conte�do da msg do Juiz: "+reply.getContent());//teste
-								range--;
-							
-							}else{
-								
-							}
-							//momento = 0; //voltar para o passo onde envia a msg de tocar;
-						}
-						
+						final_message_to_jugdes.setContent("Fim da apresentacao.");
+						final_message_to_jugdes.setConversationId("Band_Performance_end");
+						myAgent.send(final_message_to_jugdes);
+					
 					}else{
+					
+						ACLMessage reply = myAgent.receive(message_template);
+	
+						if(reply != null){
+							
+							if(reply.getPerformative() == ACLMessage.INFORM){
+								//recebe a "cara" do jurado. Se a cara for negativa, aumenta a chance de erro.
+								
+								
+								if(reply.getContent().equalsIgnoreCase("erro")){
+			
+									System.out.println("****************Conteúdo da msg do Juiz: "+reply.getContent());//teste
+									range--;
+								
+								}else{
+									
+								}
+								//momento = 0; //voltar para o passo onde envia a msg de tocar;
+							}
+							
+						}else{
+							block();
+						}
 						block();
 					}
 					break;
-					
-					
 				
 		}
 		

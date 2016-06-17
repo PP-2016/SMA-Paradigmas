@@ -1,6 +1,7 @@
 package agentes;
-import comportamentos.ComportamentoJurado;
+import javax.xml.ws.Response;
 
+import comportamentos.ComportamentoJurado;
 import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import jade.core.AID;
 import jade.core.Agent;
@@ -61,43 +62,56 @@ public class Jurado extends Agent{
 		public void action() {
 			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			ACLMessage message_inform = myAgent.receive(message_t);	
-			 
-			
 			
 			if(message_inform != null){
 				
-				String string_value = message_inform.getContent();
-				Integer value = new Integer(string_value);
+				if(message_inform.getConversationId() == "Band_Performance_end"){
 				
-				ACLMessage response = message_inform.createReply();
-
-				if(value != null){
+					disparaAvaliacao(erros_banda);
 				
-					if(value == 1 ){
-						erros_banda++;
-						
-						response.setPerformative(ACLMessage.INFORM);
-						response.setContent("ERRO");
-						
-						
-						System.out.println("****************erros da banda:"+erros_banda+"\n\n");
-						
-						System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
-					}else{
-						performance++;
-						
-						System.out.println("****************Performance:"+performance+"\n\n");
-
-						response.setPerformative(ACLMessage.INFORM);
-						response.setContent("OK");
-					}
+				}else{
+				
+					String string_value = message_inform.getContent();
+					Integer value = new Integer(string_value);
+					
+					ACLMessage response = message_inform.createReply();
+	
+					if(value != null){
+					
+						if(value == 1 ){
+							erros_banda++;
 							
-//					System.out.println("Banda: "+ message_inform.getSender().getLocalName()+"Valor: "+ value);
+							response.setPerformative(ACLMessage.INFORM);
+							response.setContent("ERRO");
+							
+							
+							System.out.println("****************erros da banda:"+erros_banda+"\n\n");
+							
+							System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
+						
+						}else{
+							performance++;
+							
+							System.out.println("****************Performance:"+performance+"\n\n");
+	
+							response.setPerformative(ACLMessage.INFORM);
+							response.setContent("OK");
+						}							
+					}
+					myAgent.send(response);
 				}
 				
-				myAgent.send(response);
 			}else{
+				block();
+			}
+		}
 
+		private void disparaAvaliacao(int erros_banda) {
+			if(erros_banda <=3){
+				System.out.println("Meus parabens, voces foram aprovados!!");
+				block();
+			}else{
+				System.out.println("Cantaram muito bem, mas erros pontuais nao deixaram voce passar hoje...");
 				block();
 			}
 			
