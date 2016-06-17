@@ -1,5 +1,10 @@
 /bin/
+<<<<<<< HEAD
 *.txt
 *.class
 *.project
 *.classpath
+=======
+.classpath
+.project
+>>>>>>> 8602d7942c5a9e7a48f3f507ac3b4837ed467d0f
