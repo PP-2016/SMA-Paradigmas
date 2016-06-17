@@ -127,8 +127,10 @@ public class Banda extends Agent {
 					Integer value = ErroRandomicoBanda(range);
 				
 					System.out.println("****************Valor random: "+value);
+					
 					message_to_jugdes.setContent(value.toString());
 					message_to_jugdes.setConversationId("Band_Performance_value");
+					
 					myAgent.send(message_to_jugdes);
 					
 					message_template = MessageTemplate.and(MessageTemplate.MatchConversationId("Band_performance_value"),
