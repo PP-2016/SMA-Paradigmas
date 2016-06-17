@@ -28,7 +28,7 @@ public class Banda extends Agent {
 	ACLMessage msg;
 	private AID[] jurado;
 	int contador = 0;
-	public static final int CONDICAO = 5;
+	public static final int CONDICAO = 20;
 	
 	//agente initializer
 	@Override
@@ -39,7 +39,7 @@ public class Banda extends Agent {
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //definição do comportamento que a agente Maria irá executar
 
-		addBehaviour(new TickerBehaviour(this, 2000) {
+		addBehaviour(new TickerBehaviour(this, 500) {
 
 			/**
 			 * 
@@ -97,7 +97,7 @@ public class Banda extends Agent {
 	
 	//inner class
 	
-	int range = 10; //variavel controladora da chance de erro
+	int range = 5; //variavel controladora da chance de erro
 	private class Performance extends Behaviour{
 		
 		private static final long serialVersionUID = 1L;

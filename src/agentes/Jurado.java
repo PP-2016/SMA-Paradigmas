@@ -23,9 +23,12 @@ public class Jurado extends Agent{
 	private AID[] jurado;
 	
 	
+	
 	private int erros_banda = 0;// numero de erros que a banda cometeu.
 	private int performance = 0;// numero de mensagens recebidas sem Erro. 
 	private int erro_plateia = 0;
+	private static final float PORCENTAGEM_MAXIMA = 10f;
+	
 	
 	  protected void setup(){
 	    //linha de apresentação
@@ -69,9 +72,7 @@ public class Jurado extends Agent{
 				
 				if(message_inform.getConversationId() == "Band_Performance_end"){
 				
-					disparaAvaliacao(erros_banda);
-						
-//					addBehaviour(new OneShotBehaviourSho);
+					disparaAvaliacao();
 				
 				}else{
 				
@@ -110,22 +111,35 @@ public class Jurado extends Agent{
 			}
 		}
 
-		private void disparaAvaliacao(int erros_banda) {
-			if(erros_banda <=3){
-				System.out.println("Meus parabens, voces foram aprovados!!");
-				block();
-			}else{
+		private void disparaAvaliacao() {
+			
+			float erros = erros_banda;
+			float ciclo = performance;
+			
+			System.out.println(erros);
+			System.out.println(ciclo);
+			
+			float porcentagem_erros = (erros/ciclo) * 100f;
+			
+			if(porcentagem_erros >= PORCENTAGEM_MAXIMA){
+				//implementar prints aqui para mostrar a performance da banda aqui. 
+				//erros; 
+				System.out.println(porcentagem_erros);
 				System.out.println("Cantaram muito bem, mas erros pontuais nao deixaram voce passar hoje...");
-				block();
+				
+			}else{
+				System.out.println("Meus parabens, voces foram aprovados!!");
+				System.out.println(porcentagem_erros);
 			}
 			
+			block();
 		}
 
 		@Override
 		public boolean done() {
 			if(performance == 20 || erros_banda == 10){
 			
-				disparaAvaliacao(erros_banda);
+				disparaAvaliacao();
 				
 				return true;				
 			}
