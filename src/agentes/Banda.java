@@ -28,7 +28,7 @@ public class Banda extends Agent {
 	ACLMessage msg;
 	private AID[] jurado;
 	int contador = 0;
-	public static final int CONDICAO = 20;
+	public static final int CONDICAO = 5;
 	
 	//agente initializer
 	@Override
@@ -39,7 +39,7 @@ public class Banda extends Agent {
 	    System.out.println(this.getLocalName() + " diz: Boa noite galeraaaa!!!");
 	    //definição do comportamento que a agente Maria irá executar
 
-		addBehaviour(new TickerBehaviour(this, 1000) {
+		addBehaviour(new TickerBehaviour(this, 2000) {
 
 			/**
 			 * 
@@ -76,11 +76,14 @@ public class Banda extends Agent {
 						int momento = 0;//variavel que controla o switch
 						addBehaviour(new Performance(momento));
 						
-				}else{
+				}else if(contador>= CONDICAO){
 						System.out.println("****************: " + getAID().getLocalName() + " diz: Essa foi nossa música!!!");
 						int momento =1;
 						addBehaviour(new Performance(momento));
-					}
+						stop();
+				}else{
+					block();
+				}
 					
 					
 				

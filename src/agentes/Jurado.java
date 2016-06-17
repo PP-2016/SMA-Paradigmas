@@ -7,6 +7,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.lang.acl.ACLMessage;
@@ -22,8 +23,9 @@ public class Jurado extends Agent{
 	private AID[] jurado;
 	
 	
-	int erros_banda =0;// numero de erros que a banda cometeu.
-	int performance =0;// numero de mensagens recebidas sem Erro. 
+	private int erros_banda = 0;// numero de erros que a banda cometeu.
+	private int performance = 0;// numero de mensagens recebidas sem Erro. 
+	private int erro_plateia = 0;
 	
 	  protected void setup(){
 	    //linha de apresentaÃ§Ã£o
@@ -46,12 +48,12 @@ public class Jurado extends Agent{
 		}   
 	    
 	    
-	    addBehaviour(new ComportamentoJulgar());
+	    addBehaviour(new ComportamentoJuradoTecnico());
 	  }
 	  
 	  
 	  
-	  private class ComportamentoJulgar extends Behaviour{
+	  private class ComportamentoJuradoTecnico extends Behaviour{
 		  
 			
 
@@ -68,6 +70,8 @@ public class Jurado extends Agent{
 				if(message_inform.getConversationId() == "Band_Performance_end"){
 				
 					disparaAvaliacao(erros_banda);
+						
+//					addBehaviour(new OneShotBehaviourSho);
 				
 				}else{
 				
@@ -88,7 +92,7 @@ public class Jurado extends Agent{
 							System.out.println("****************erros da banda:"+erros_banda+"\n\n");
 							
 							System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
-						
+							performance++;
 						}else{
 							performance++;
 							
@@ -119,9 +123,68 @@ public class Jurado extends Agent{
 
 		@Override
 		public boolean done() {
-			return false;
+			if(performance == 20 || erros_banda == 10){
+			
+				disparaAvaliacao(erros_banda);
+				
+				return true;				
+			}
+			else
+				return false;
 		}
 		  
 	  }
+	  
+	  private class ComportamentoJuradoEmotivo extends Behaviour{
+
+		@Override
+		public void action() {
+			
+			
+			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.AGREE);
+			// setar uma performativa diferente, pois o INFORM  ja está sendo utilizado para comunicaçoes com a Banda.
+			// Este jurado Recebe mensagens da plateia e decide como agir a partir daqui.
+			
+			ACLMessage message_inform = myAgent.receive(message_t);
+			
+			
+			if(message_inform != null){
+				
+			
+				String string_value = message_inform.getContent();
+				
+				
+				ACLMessage response = message_inform.createReply();
+
+				if(string_value != null){
+					
+					if(string_value.equalsIgnoreCase("uhhh")){
+						
+					}else if(string_value.equalsIgnoreCase("uhu")){
+							
+					}
+				
+				
+				}else{
+					block();
+				}
+			}
+			
+		}
+
+		@Override
+		public boolean done() {
+			if(performance == 20 || erro_plateia == 10)
+				return true;
+			else
+				return false;
+		}
+	  
+	  }
+	  
+	  
+	  
+	  
+	  
 
 }
