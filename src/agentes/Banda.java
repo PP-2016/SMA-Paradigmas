@@ -27,6 +27,7 @@ public class Banda extends Agent {
 	AID id = new AID(name, AID.ISLOCALNAME);
 	ACLMessage msg;
 	private AID[] jurado;
+	private AID plateia;
 	int contador = 0;
 	public static final int CONDICAO = 20;
 	
@@ -53,13 +54,19 @@ public class Banda extends Agent {
 					
 					System.out.println("****************Cantando..");
 					DFAgentDescription template = new DFAgentDescription();
+					DFAgentDescription template2 = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
+					ServiceDescription sd2 = new ServiceDescription();
 					
 					sd.setType("Ato de Jugar");
+					sd2.setType("Ato de acompanhar o show");
 					template.addServices(sd);
+					template2.addServices(sd2);
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template);
+						DFAgentDescription[] result2 = DFService.search(myAgent, template2);
 						jurado = new AID[result.length];
+						plateia = result2[0].getName();
 						for (int i = 0; i < result.length; ++i) {
 							jurado[i] = result[i].getName();
 //							System.out.println(jurado[i].getName());
@@ -97,7 +104,7 @@ public class Banda extends Agent {
 	
 	//inner class
 	
-	int range = 5; //variavel controladora da chance de erro
+	int range = 7; //variavel controladora da chance de erro
 	private class Performance extends Behaviour{
 		
 		private static final long serialVersionUID = 1L;
@@ -115,9 +122,11 @@ public class Banda extends Agent {
 			switch(momento){
 				case 0:
 					ACLMessage message_to_jugdes = new ACLMessage(ACLMessage.INFORM);
+					ACLMessage message_to_plateia = new ACLMessage(ACLMessage.INFORM);
 					for (int i = 0; i < jurado.length; i++) {
 						message_to_jugdes.addReceiver(jurado[i]);
 					} 
+					message_to_plateia.addReceiver(plateia);
 					
 					// MENSAGEM DE TESTE
 					Integer value = ErroRandomicoBanda(range);
@@ -126,8 +135,11 @@ public class Banda extends Agent {
 					
 					message_to_jugdes.setContent(value.toString());
 					message_to_jugdes.setConversationId("Band_Performance_value");
+					message_to_plateia.setContent(value.toString());
+					message_to_plateia.setConversationId("Band_Performance_value");
 					
 					myAgent.send(message_to_jugdes);
+					myAgent.send(message_to_plateia);
 					
 					message_template = MessageTemplate.and(MessageTemplate.MatchConversationId("Band_performance_value"),
 							MessageTemplate.MatchInReplyTo(message_to_jugdes.getReplyWith()));
