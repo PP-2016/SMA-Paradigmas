@@ -51,6 +51,7 @@ public class Plateia extends Agent{
 		@Override
 		public void action() {
 			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+			MessageTemplate message_t2 = MessageTemplate.MatchPerformative(ACLMessage.AGREE);
 			ACLMessage message_inform = myAgent.receive(message_t);	
 			
 			if(message_inform != null){
@@ -58,7 +59,28 @@ public class Plateia extends Agent{
 				String string_value = message_inform.getContent();
 				Integer value = new Integer(string_value);
 				
-				ACLMessage response = message_inform.createReply();
+				
+				DFAgentDescription template = new DFAgentDescription();
+				ServiceDescription sd = new ServiceDescription();
+				
+				sd.setType("Ato de acompanhar o show");
+				template.addServices(sd);
+				
+				try {
+					DFAgentDescription[] result = DFService.search(myAgent, template);
+					jurado = new AID[result.length];
+					for (int i = 0; i < result.length; ++i) {
+						jurado[i] = result[i].getName();
+					}
+				} catch (FIPAException e) {
+					System.out.println("*****************Erro");
+					e.printStackTrace();
+				}
+				
+				ACLMessage response = new ACLMessage(ACLMessage.AGREE);
+				for (int i = 0; i < jurado.length; i++) {
+					response.addReceiver(jurado[i]);
+				}
 
 				if(value != null){
 				

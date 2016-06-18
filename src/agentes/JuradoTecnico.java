@@ -11,7 +11,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.MessageTemplate;
 
 
-public class Jurado extends Agent{
+public class JuradoTecnico extends Agent{
 	
 	private static final long serialVersionUID = 2L;
 	private AID[] jurado;
@@ -47,7 +47,6 @@ public class Jurado extends Agent{
 	    
 	    
 	    addBehaviour(new ComportamentoJuradoTecnico());
-	    addBehaviour(new ComportamentoJuradoEmotivo());
 	  }
 	  
 	  
@@ -119,12 +118,11 @@ public class Jurado extends Agent{
 			if(porcentagem_erros > PORCENTAGEM_MAXIMA){
 				//implementar prints aqui para mostrar a performance da banda aqui. 
 				//erros; 
-				System.out.println(porcentagem_erros);
 				System.out.println("Cantaram muito bem, mas erros pontuais nao deixaram voce passar hoje...");
-				
+				System.out.println("Porcentagem de erros: "+porcentagem_erros+"%");
 			}else{
 				System.out.println("Meus parabens, voces foram aprovados!!");
-				System.out.println(porcentagem_erros);
+				System.out.println("Porcentagem de erros: "+porcentagem_erros+"%");
 			}
 			
 			block();
@@ -143,66 +141,5 @@ public class Jurado extends Agent{
 		}
 		  
 	  }
-	  
-	  private class ComportamentoJuradoEmotivo extends Behaviour{
-
-		@Override
-		public void action() {
-			
-			
-			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.AGREE);
-			// setar uma performativa diferente, pois o INFORM  ja est� sendo utilizado para comunica�oes com a Banda.
-			// Este jurado Recebe mensagens da plateia e decide como agir a partir daqui.
-			
-			ACLMessage message_inform = myAgent.receive(message_t);
-						
-			if(message_inform != null){
-				
-				String string_value = message_inform.getContent();
-
-				if(string_value != null){
-					
-					if(string_value.equalsIgnoreCase("uhhh")){
-						erro_plateia = erro_plateia +3;
-					}else if(string_value.equalsIgnoreCase("uhuu")){
-						palmas_plateia++;
-					}
-				
-				}else{
-					block();
-				}
-			}
-			
-		}
-
-		@Override
-		public boolean done() {
-			if(performance == 20){
-				disparaAvaliacao();
-				return true;
-			}
-				
-			else
-				return false;
-		}
-
-		private void disparaAvaliacao() {
-			System.out.println("****Decisão do jurado emotivo: ****");
-			System.out.println(erro_plateia);
-			System.out.println(palmas_plateia);
-			if(erro_plateia > palmas_plateia){
-				System.out.println("Cantaram muito bem, mas faltou emoção na sua musica para conseguir passar hoje...");
-			}else{
-				System.out.println("Excelente!! Vocês tocaram meu coração!");
-			}
-			
-		}
-	  
-	  }
-	  
-	  
-	  
-	  
-	  
 
 }
