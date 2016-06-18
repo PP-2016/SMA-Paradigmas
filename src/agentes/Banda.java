@@ -81,7 +81,7 @@ public class Banda extends Agent {
 						addBehaviour(new Performance(momento));
 						
 				}else if(contador>= CONDICAO){
-						System.out.println("****************: " + getAID().getLocalName() + " diz: Essa foi nossa música!!!");
+						System.out.println("****************: " + getAID().getLocalName() + " diz: Obrigado pela oportunidade!!!");
 						int momento =1;
 						addBehaviour(new Performance(momento));
 						stop();
