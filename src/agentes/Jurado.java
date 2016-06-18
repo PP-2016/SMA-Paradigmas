@@ -52,6 +52,7 @@ public class Jurado extends Agent{
 	    
 	    
 	    addBehaviour(new ComportamentoJuradoTecnico());
+	    addBehaviour(new ComportamentoJuradoEmotivo());
 	  }
 	  
 	  
@@ -116,12 +117,11 @@ public class Jurado extends Agent{
 			float erros = erros_banda;
 			float ciclo = performance;
 			
-			System.out.println(erros);
-			System.out.println(ciclo);
+			System.out.println("****DecisÃ£o do jurado tÃ©cnico: ****");
 			
 			float porcentagem_erros = (erros/ciclo) * 100f;
 			
-			if(porcentagem_erros >= PORCENTAGEM_MAXIMA){
+			if(porcentagem_erros > PORCENTAGEM_MAXIMA){
 				//implementar prints aqui para mostrar a performance da banda aqui. 
 				//erros; 
 				System.out.println(porcentagem_erros);
@@ -156,7 +156,7 @@ public class Jurado extends Agent{
 			
 			
 			MessageTemplate message_t = MessageTemplate.MatchPerformative(ACLMessage.AGREE);
-			// setar uma performativa diferente, pois o INFORM  ja está sendo utilizado para comunicaçoes com a Banda.
+			// setar uma performativa diferente, pois o INFORM  ja estï¿½ sendo utilizado para comunicaï¿½oes com a Banda.
 			// Este jurado Recebe mensagens da plateia e decide como agir a partir daqui.
 			
 			ACLMessage message_inform = myAgent.receive(message_t);
@@ -174,10 +174,9 @@ public class Jurado extends Agent{
 					
 					if(string_value.equalsIgnoreCase("uhhh")){
 						
-					}else if(string_value.equalsIgnoreCase("uhu")){
+					}else if(string_value.equalsIgnoreCase("uhuu")){
 							
 					}
-				
 				
 				}else{
 					block();

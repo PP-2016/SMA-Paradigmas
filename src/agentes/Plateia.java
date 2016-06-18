@@ -20,7 +20,8 @@ import jade.lang.acl.MessageTemplate;
 public class Plateia extends Agent{
 	
 	private static final long serialVersionUID = 2L;
-	private AID[] plateia;
+	private AID plateia;
+	private AID[] jurado;
 	
 	private int erro_plateia = 0;
 	
