@@ -1,13 +1,8 @@
 package agentes;
-import javax.xml.ws.Response;
 
-import comportamentos.ComportamentoJurado;
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAException;
@@ -16,14 +11,19 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.MessageTemplate;
 
 
-public class Jurado extends Agent{
+public class JuradoTecnico extends Agent{
 	
 	private static final long serialVersionUID = 2L;
 	private AID[] jurado;
 	
 	
-	int erros_banda =0;// numero de erros que a banda cometeu.
-	int performance =0;// numero de mensagens recebidas sem Erro. 
+	
+	private int erros_banda = 0;// numero de erros que a banda cometeu.
+	private int performance = 0;// numero de mensagens recebidas sem Erro. 
+	private int erro_plateia = 0;
+	private int palmas_plateia = 0;
+	private static final float PORCENTAGEM_MAXIMA = 10f;
+	
 	
 	  protected void setup(){
 	    //linha de apresentação
@@ -46,12 +46,12 @@ public class Jurado extends Agent{
 		}   
 	    
 	    
-	    addBehaviour(new ComportamentoJulgar());
+	    addBehaviour(new ComportamentoJuradoTecnico());
 	  }
 	  
 	  
 	  
-	  private class ComportamentoJulgar extends Behaviour{
+	  private class ComportamentoJuradoTecnico extends Behaviour{
 		  
 			
 
@@ -67,7 +67,7 @@ public class Jurado extends Agent{
 				
 				if(message_inform.getConversationId() == "Band_Performance_end"){
 				
-					disparaAvaliacao(erros_banda);
+					disparaAvaliacao();
 				
 				}else{
 				
@@ -88,7 +88,7 @@ public class Jurado extends Agent{
 							System.out.println("****************erros da banda:"+erros_banda+"\n\n");
 							
 							System.out.println("*****Banda cometeu um erro, contagem: "+erros_banda+"*******");
-						
+							performance++;
 						}else{
 							performance++;
 							
@@ -106,20 +106,38 @@ public class Jurado extends Agent{
 			}
 		}
 
-		private void disparaAvaliacao(int erros_banda) {
-			if(erros_banda <=3){
-				System.out.println("Meus parabens, voces foram aprovados!!");
-				block();
-			}else{
+		private void disparaAvaliacao() {
+			
+			float erros = erros_banda;
+			float ciclo = performance;
+			
+			System.out.println("****Decisão do jurado técnico: ****");
+			
+			float porcentagem_erros = (erros/ciclo) * 100f;
+			
+			if(porcentagem_erros > PORCENTAGEM_MAXIMA){
+				//implementar prints aqui para mostrar a performance da banda aqui. 
+				//erros; 
 				System.out.println("Cantaram muito bem, mas erros pontuais nao deixaram voce passar hoje...");
-				block();
+				System.out.println("Porcentagem de erros: "+porcentagem_erros+"%");
+			}else{
+				System.out.println("Meus parabens, voces foram aprovados!!");
+				System.out.println("Porcentagem de erros: "+porcentagem_erros+"%");
 			}
 			
+			block();
 		}
 
 		@Override
 		public boolean done() {
-			return false;
+			if(performance == 20 || erros_banda == 10){
+			
+				disparaAvaliacao();
+				
+				return true;				
+			}
+			else
+				return false;
 		}
 		  
 	  }
