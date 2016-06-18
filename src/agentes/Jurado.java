@@ -1,14 +1,8 @@
 package agentes;
-import javax.xml.ws.Response;
 
-import comportamentos.ComportamentoJurado;
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAException;
@@ -27,6 +21,7 @@ public class Jurado extends Agent{
 	private int erros_banda = 0;// numero de erros que a banda cometeu.
 	private int performance = 0;// numero de mensagens recebidas sem Erro. 
 	private int erro_plateia = 0;
+	private int palmas_plateia = 0;
 	private static final float PORCENTAGEM_MAXIMA = 10f;
 	
 	
@@ -160,22 +155,17 @@ public class Jurado extends Agent{
 			// Este jurado Recebe mensagens da plateia e decide como agir a partir daqui.
 			
 			ACLMessage message_inform = myAgent.receive(message_t);
-			
-			
+						
 			if(message_inform != null){
 				
-			
 				String string_value = message_inform.getContent();
-				
-				
-				ACLMessage response = message_inform.createReply();
 
 				if(string_value != null){
 					
 					if(string_value.equalsIgnoreCase("uhhh")){
-						
+						erro_plateia = erro_plateia +3;
 					}else if(string_value.equalsIgnoreCase("uhuu")){
-							
+						palmas_plateia++;
 					}
 				
 				}else{
@@ -187,10 +177,25 @@ public class Jurado extends Agent{
 
 		@Override
 		public boolean done() {
-			if(performance == 20 || erro_plateia == 10)
+			if(performance == 20){
+				disparaAvaliacao();
 				return true;
+			}
+				
 			else
 				return false;
+		}
+
+		private void disparaAvaliacao() {
+			System.out.println("****Decisão do jurado emotivo: ****");
+			System.out.println(erro_plateia);
+			System.out.println(palmas_plateia);
+			if(erro_plateia > palmas_plateia){
+				System.out.println("Cantaram muito bem, mas faltou emoção na sua musica para conseguir passar hoje...");
+			}else{
+				System.out.println("Excelente!! Vocês tocaram meu coração!");
+			}
+			
 		}
 	  
 	  }

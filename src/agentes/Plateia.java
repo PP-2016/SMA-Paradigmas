@@ -1,14 +1,8 @@
 package agentes;
-import javax.xml.ws.Response;
 
-import comportamentos.ComportamentoJurado;
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAException;
@@ -75,11 +69,11 @@ public class Plateia extends Agent{
 						response.setContent("uhhh");
 						
 						
-						System.out.println("****************Plateia grita: Uhhh!!!!!\n\n");
+						System.out.println("****************Plateia grita: Uuuuuuuhhh!!!!!\n\n");
 											
 					}else{
 						
-						System.out.println("****************Plateia grita: Uhuu!!!!!\n\n");
+						System.out.println("****************Plateia grita: Uuuhhhhuu!!!!!\n\n");
 
 						response.setPerformative(ACLMessage.AGREE);
 						response.setContent("uhuu");
